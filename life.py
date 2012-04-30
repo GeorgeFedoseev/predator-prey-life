@@ -288,13 +288,17 @@ class App(object):
         self.field = self.readFieldFromFile("life_config.txt")
         fieldSize = self.field.getFieldSize()
 
+        self.isRunning = True
+
         self.root = tk.Tk()
         self.frame = tk.Frame(self.root)
         self.label = tk.Label(self.frame, width=20, text="")
         self.canvas = tk.Canvas(self.frame, height=fieldSize[0], width=fieldSize[1], bg="#008099")
+        self.button = tk.Button(self.frame, text="OK", command=self.changeRunningState)
         self.frame.pack()
         self.label.pack(side=tk.RIGHT)
         self.canvas.pack()
+        self.button.pack()
         self.tick()
 
         self.root.mainloop()
@@ -303,8 +307,13 @@ class App(object):
         self.field.tick()
         self.field.paint(self.canvas)
         self.label.configure(text=self.field.getStatus())
-        if not self.field.isTimeToFinish():
+        if self.isRunning and not self.field.isTimeToFinish():
             self.root.after(250, self.tick)
+
+    def changeRunningState(self):
+        self.isRunning = not self.isRunning
+        if self.isRunning:
+            self.tick()
 
     def readFieldFromFile(self, fileName):
         file = open(fileName)
