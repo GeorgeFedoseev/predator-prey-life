@@ -4,6 +4,9 @@ predator-prey-life
 Simple python script modelling predator-prey ocean system. Ocean is represented with 2d cell system.
 Each cell can contain either one of predator, prey, obstacle or be empty.
 
+The script uses the tkinter graphics interface: red cells are predators, green are prey,
+black are obstacles and blue are empty.
+
 Each time tick all cells are processed:
 
 1. Each creature can make a move to a neighbour cell.
