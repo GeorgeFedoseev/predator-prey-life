@@ -5,7 +5,11 @@ import random
 from timeit import default_timer as timer
 
 import numpy as np
+import matplotlib
+#matplotlib.use("TkAgg") # set the backend
 import matplotlib.pyplot as plt
+ 
+from lotka_volterra import calc_Lotka_Volterra
 
 class CellCreature(object):
     """
@@ -168,7 +172,7 @@ class Cell(object):
                 fill=self.getColor(),
                 outline=self.getColor(),
             )
-            print "created rect"
+            #print "created rect"
         color = self.getColor()
         canvas.itemconfig(self.rect, fill=color, outline=color)
         
@@ -318,7 +322,7 @@ class App(object):
         self.plotAllButton = tk.Button(self.frame, text="Plot", command=self.plot_all)
 
         self.frame.pack()
-        self.label.pack(side=tk.RIGHT)
+        self.label.pack(side=tk.RIGHT, fill=tk.BOTH)
         self.canvas.pack()
         self.restartButton.pack()
         
@@ -326,9 +330,9 @@ class App(object):
 
 
 
-        self.simulation_delay_scale = tk.Scale(self.frame, from_=0, to=5000, orient=tk.HORIZONTAL, label="отрисовка каждые, мс")
+        self.simulation_delay_scale = tk.Scale(self.frame, from_=0, to=5000, orient=tk.HORIZONTAL, label="отрисовка каждые (N миллисекунд):")
         self.simulation_delay_scale.set(0)
-        self.simulation_delay_scale.pack(side=tk.RIGHT)
+        self.simulation_delay_scale.pack(ipadx=100)
 
 
         # plots
@@ -343,22 +347,25 @@ class App(object):
         self.fig_PreyN_PredatorN = plt.gcf()
         self.fig_PreyN_PredatorN.canvas.set_window_title('Фазовый портрет')
         self.fig_PreyN_PredatorN.show()
-        plt.hold(True)
+        
 
-        #self.fig_PreyN_PredatorN.show()
-        #self.fig_PreyN_PredatorN.canvas.draw()
-
-        plt.figure(2)
-        plt.title("N(t)")
+        plt.figure(2)        
         self.fig_N_t = plt.gcf()
-        self.fig_N_t.canvas.set_window_title('N(t)')
-        plt.hold(True)
-        #self.fig_N_t.show()
-        #self.fig_N_t.canvas.draw()
-        self.fig_N_t.show()
+        self.fig_N_t.canvas.set_window_title('N(t)')        
         self.fig_N_t.show()
 
-        #plt.axis([0, 10, 0, 1])
+        plt.figure(3)        
+        self.fig_LV_t = plt.gcf()
+        self.fig_LV_t.canvas.set_window_title('LV(t)')
+        self.fig_LV_t.show()
+
+        plt.figure(4)        
+        self.fig_LV_phase = plt.gcf()
+        self.fig_LV_phase.canvas.set_window_title('LV_phase')
+        self.fig_LV_phase.show()
+
+
+        
 
         self.last_time_tick = 0        
         self.tick()
@@ -407,6 +414,8 @@ class App(object):
     def plot_all(self):
         self.plot_N_t()
         self.plot_PreyN_PredatorN()
+        self.plot_LotkaV_N()
+        self.plot_LotkaV_N_Phase()
 
     def plot_PreyN_PredatorN(self):   
 
@@ -415,7 +424,7 @@ class App(object):
 
         self.fig_PreyN_PredatorN.clf()        
 
-        plt.plot(self.plot_y_prey, self.plot_y_predators, c="b")        
+        plt.plot(self.plot_y_prey, self.plot_y_predators, c="b", alpha=1)        
         self.fig_PreyN_PredatorN.canvas.draw()
         plt.hold(True)
 
@@ -430,7 +439,35 @@ class App(object):
         self.fig_N_t.canvas.draw()
         plt.hold(True)
 
+    
+    def plot_LotkaV_N(self):
+        # switch to fig      
+        plt.figure(self.fig_LV_t.number)
+
+        self.fig_LV_t.clf()       
+
+        res = calc_Lotka_Volterra(200, 100, 1000)
+        plt.plot(res[0], res[1], c="g")
+        plt.plot(res[0], res[2], c="r")
+
+        self.fig_LV_t.canvas.draw()
+
+        plt.hold(True)
+
+    def plot_LotkaV_N_Phase(self):
+        # switch to fig      
+        plt.figure(self.fig_LV_phase.number)
+
+        #self.fig_LV_phase.clf()       
+
+        res = calc_Lotka_Volterra(200, 100, 1000)
+        plt.plot(res[1], res[2], c="b", alpha=1)
         
+
+        self.fig_LV_phase.canvas.draw()
+
+        plt.hold(True)
+
 
     def changeRunningState(self):
         self.isRunning = not self.isRunning
