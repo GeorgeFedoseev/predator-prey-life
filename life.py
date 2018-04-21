@@ -1,7 +1,11 @@
 ﻿import Tkinter as tk
 import time
 import random
+
 from timeit import default_timer as timer
+
+import numpy as np
+import matplotlib.pyplot as plt
 
 class CellCreature(object):
     """
@@ -323,25 +327,25 @@ class App(object):
 
         while True:
             try:
-                start = timer()
+                #start = timer()
 
                 self.root.update()
                 #self.root.update_idletasks()    
 
                 #print("tk update took: %f" % (timer() - start))
-            except Exception as e:
-                break
+           
             
-            if self.isRunning and not self.field.isTimeToFinish():
-                print("time: %f" % (time.time() - self.last_time_tick))
+                if self.isRunning and not self.field.isTimeToFinish():
+                    print("time: %f" % (time.time() - self.last_time_tick))
 
-                if time.time() - self.last_time_tick > float(self.simulation_delay_scale.get())/1000:
-                    self.tick()
-                    self.last_time_tick = time.time();
-            else:
-                #self.root.quit()
-                #break
-                pass
+                    if time.time() - self.last_time_tick > float(self.simulation_delay_scale.get())/1000:
+                        self.tick()
+                        self.last_time_tick = time.time();
+                else:                    
+                    pass
+            except Exception as e:
+                print "Exception: %s" % str(e)
+                break
 
         #self.root.mainloop()
 
