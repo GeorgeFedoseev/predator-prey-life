@@ -290,9 +290,9 @@ class Field(object):
         """
         if not self.isTimeToFinish():
             return (
-                "step #" + str(self.step) + "\n" +
-                "predator number: " + str(self.predatorNumber) + "\n" +
-                "prey number: " + str(self.preyNumber)
+                "шаг #" + str(self.step) + "\n" +
+                "хищников: " + str(self.predatorNumber) + "\n" +
+                "жертв: " + str(self.preyNumber)
             )
         else:
             if self.predatorNumber != 0 and self.preyNumber != 0:
@@ -315,7 +315,8 @@ class App(object):
 
         self.root = tk.Tk()
         self.frame = tk.Frame(self.root)
-        self.label = tk.Label(self.frame, width=20, text="")
+
+        self.label = tk.Label(self.frame, width=20, text="", justify=tk.LEFT)
         self.canvas = tk.Canvas(self.frame, height=fieldSize[0], width=fieldSize[1], bg="#008099")
 
         self.restartButton = tk.Button(self.frame, text="Restart", command=self.restartSimulation)        
