@@ -241,6 +241,22 @@ class Field(object):
                         if (not destination.setNewcomer(newcomer)):
                             element.discardAction()
 
+                oldstate = element.getState()
+                element.update()
+                newstate = element.getState()
+
+                if oldstate != newstate:
+                    if oldstate == 'predator':
+                        self.predatorNumber = self.predatorNumber - 1
+                    if newstate == 'predator':
+                        self.predatorNumber = self.predatorNumber + 1
+                    if oldstate == 'prey':
+                        self.preyNumber = self.preyNumber - 1
+                    if newstate == 'prey':
+                        self.preyNumber = self.preyNumber + 1
+
+                
+
         #print("tick took: %f" % (timer() - start))
         self.step = self.step + 1
 
@@ -259,21 +275,7 @@ class Field(object):
         #canvas.delete("all")
         start = timer()
         for elements in self.cells:
-            for element in elements:
-                oldstate = element.getState()
-                element.update()
-                newstate = element.getState()
-
-                if oldstate != newstate:
-                    if oldstate == 'predator':
-                        self.predatorNumber = self.predatorNumber - 1
-                    if newstate == 'predator':
-                        self.predatorNumber = self.predatorNumber + 1
-                    if oldstate == 'prey':
-                        self.preyNumber = self.preyNumber - 1
-                    if newstate == 'prey':
-                        self.preyNumber = self.preyNumber + 1
-
+            for element in elements:           
                 element.paint(canvas, self.cellSize)
         #print("paint took: %f" % (timer() - start))
 
@@ -312,22 +314,25 @@ class App(object):
         self.label = tk.Label(self.frame, width=20, text="")
         self.canvas = tk.Canvas(self.frame, height=fieldSize[0], width=fieldSize[1], bg="#008099")
         self.restartButton = tk.Button(self.frame, text="Restart", command=self.restartSimulation)
-        self.plotButton = tk.Button(self.frame, text="Plot", command=self.plot)
+        self.plot1Button = tk.Button(self.frame, text="Plot N(t)", command=self.plot_N_t)
+        self.plot2Button = tk.Button(self.frame, text="Plot PreyN(PredatorN)", command=self.plot_PreyN_PredatorN)
         self.frame.pack()
         self.label.pack(side=tk.RIGHT)
         self.canvas.pack()
         self.restartButton.pack()
-        self.plotButton.pack()
+        self.plot1Button.pack()
+        self.plot2Button.pack()
 
 
 
-        self.simulation_delay_scale = tk.Scale(self.frame, from_=0, to=1000, orient=tk.HORIZONTAL, label="delay")
+        self.simulation_delay_scale = tk.Scale(self.frame, from_=0, to=5000, orient=tk.HORIZONTAL, label="отрисовка каждые, мс")
         self.simulation_delay_scale.set(0)
         self.simulation_delay_scale.pack(side=tk.RIGHT)
 
 
-        # plot
-        self.fig = None
+        # plots
+        self.fig_N_t = None
+        self.fig_PreyN_PredatorN = None
 
         self.plot_x = []
         self.plot_y_predators = []
@@ -343,69 +348,71 @@ class App(object):
         while True:
             try:
                 #start = timer()
-
                 self.root.update()
                 #self.root.update_idletasks()    
-
-                #print("tk update took: %f" % (timer() - start))
-           
+                #print("tk update took: %f" % (timer() - start))           
             
                 if self.isRunning and not self.field.isTimeToFinish():
-                    #print("time: %f" % (time.time() - self.last_time_tick))
+                    self.tick()                    
 
-                   # y = np.random.random()
-                    # draw prey number
-
-
-                    if time.time() - self.last_time_tick > float(self.simulation_delay_scale.get())/1000:
-                        self.tick()
-                        self.last_time_tick = time.time();
-
-                        self.plot_x.append(self.field.step)
-                        self.plot_y_prey.append(self.field.preyNumber)
-                        self.plot_y_predators.append(self.field.predatorNumber)    
-                        
-                else:                    
-                    pass
+                    self.plot_x.append(self.field.step)
+                    self.plot_y_prey.append(self.field.preyNumber)
+                    self.plot_y_predators.append(self.field.predatorNumber)                            
+                
             except Exception as e:
                 print "Exception: %s" % str(e)
                 break
 
-        #self.root.mainloop()
-
     def tick(self):
-
         start = timer()
 
+        # update field logic
         self.field.tick()
-        self.field.paint(self.canvas)
+
+        # paint 
+        if time.time() - self.last_time_tick > float(self.simulation_delay_scale.get())/1000:            
+            self.field.paint(self.canvas)
+            self.last_time_tick = time.time()
+        
         self.label.configure(text=self.field.getStatus())
-        #if self.isRunning and not self.field.isTimeToFinish():
-         #   if time.time() - last_time_tick > self.simulation_speed_scale:
-
-         #       self.last_time_tick = time.time();    
-            #self.root.after(self.simulation_speed_scale.get(), self.tick)
-            
-        print("app tick took: %f" % (timer() - start))
-
+       
     def restartSimulation(self):
         self.canvas.delete('all')
         self.field = self.readFieldFromFile("life_config.txt")
+
         self.plot_x = []
         self.plot_y_predators = []
         self.plot_y_prey = []
-        self.fig.clf()
+    
 
-    def plot(self):
-        if not self.fig:
-            self.fig = plt.gcf()
-            self.fig.show()
-            self.fig.canvas.draw()
+    def plot_PreyN_PredatorN(self):
+        if not self.fig_PreyN_PredatorN:
+            self.fig_PreyN_PredatorN = plt.gcf()
+            self.fig_PreyN_PredatorN.show()
+            self.fig_PreyN_PredatorN.canvas.draw()
 
-        self.fig.clf()
+        # switch to fig      
+        plt.figure(self.fig_PreyN_PredatorN.number)
+
+        self.fig_PreyN_PredatorN.clf()
+        plt.plot(self.plot_y_prey, self.plot_y_predators, c="b")        
+        self.fig_PreyN_PredatorN.canvas.draw()
+        plt.hold(True)
+
+    def plot_N_t(self):
+        if not self.fig_N_t:                  
+            self.fig_N_t = plt.gcf()
+            self.fig_N_t.show()
+            self.fig_N_t.canvas.draw()
+
+        # switch to fig      
+        plt.figure(self.fig_N_t.number)
+
+        self.fig_N_t.clf()
         plt.plot(self.plot_x, self.plot_y_prey, c="g")
         plt.plot(self.plot_x, self.plot_y_predators, c="r")
-        self.fig.canvas.draw()
+        self.fig_N_t.canvas.draw()
+        plt.hold(True)
 
         
 
