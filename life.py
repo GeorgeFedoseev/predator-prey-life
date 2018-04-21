@@ -1,6 +1,7 @@
 ﻿import Tkinter as tk
 import time
 import random
+from timeit import default_timer as timer
 
 class CellCreature(object):
     """
@@ -67,6 +68,8 @@ class Cell(object):
         self.y = y
         self.creature = None
         self.nextState = {}
+
+        self.rect = None
 
     def getState(self):
         """
@@ -152,14 +155,19 @@ class Cell(object):
             self.creature.tick(self)
 
     def paint(self, canvas, cellSize):
-        canvas.create_rectangle(
-            self.x * cellSize[0] + 1,
-            self.y * cellSize[1] + 1,
-            (self.x + 1) * cellSize[0] + 1,
-            (self.y + 1) * cellSize[1] + 1,
-            fill=self.getColor(),
-            outline=self.getColor(),
-        )
+        if not self.rect:
+            self.rect = canvas.create_rectangle(
+                self.x * cellSize[0] + 1,
+                self.y * cellSize[1] + 1,
+                (self.x + 1) * cellSize[0] + 1,
+                (self.y + 1) * cellSize[1] + 1,
+                fill=self.getColor(),
+                outline=self.getColor(),
+            )
+            print "created rect"
+        color = self.getColor()
+        canvas.itemconfig(self.rect, fill=color, outline=color)
+        
 
 class Field(object):
     """
@@ -214,6 +222,7 @@ class Field(object):
         """
         goes through all field objects & analizes their decisions
         """
+        start = timer()
         for row,elements in enumerate(self.cells):
             for column,element in enumerate(elements):
                 action = element.getDecision()
@@ -228,6 +237,7 @@ class Field(object):
                         if (not destination.setNewcomer(newcomer)):
                             element.discardAction()
 
+        #print("tick took: %f" % (timer() - start))
         self.step = self.step + 1
 
     def isTimeToFinish(self):
@@ -242,6 +252,8 @@ class Field(object):
         update objects states after tick & paint them
         also updates stats
         """
+        #canvas.delete("all")
+        start = timer()
         for elements in self.cells:
             for element in elements:
                 oldstate = element.getState()
@@ -259,6 +271,7 @@ class Field(object):
                         self.preyNumber = self.preyNumber + 1
 
                 element.paint(canvas, self.cellSize)
+        #print("paint took: %f" % (timer() - start))
 
 
     def getStatus(self):
@@ -294,21 +307,62 @@ class App(object):
         self.frame = tk.Frame(self.root)
         self.label = tk.Label(self.frame, width=20, text="")
         self.canvas = tk.Canvas(self.frame, height=fieldSize[0], width=fieldSize[1], bg="#008099")
-        self.button = tk.Button(self.frame, text="OK", command=self.changeRunningState)
+        self.button = tk.Button(self.frame, text="OK", command=self.restartSimulation)
         self.frame.pack()
         self.label.pack(side=tk.RIGHT)
         self.canvas.pack()
         self.button.pack()
+
+        self.simulation_delay_scale = tk.Scale(self.frame, from_=0, to=1000, orient=tk.HORIZONTAL, label="delay")
+        self.simulation_delay_scale.set(5)
+        self.simulation_delay_scale.pack(side=tk.RIGHT)
+
+        self.last_time_tick = 0
+
         self.tick()
 
-        self.root.mainloop()
+        while True:
+            try:
+                start = timer()
+
+                self.root.update()
+                #self.root.update_idletasks()    
+
+                #print("tk update took: %f" % (timer() - start))
+            except Exception as e:
+                break
+            
+            if self.isRunning and not self.field.isTimeToFinish():
+                print("time: %f" % (time.time() - self.last_time_tick))
+
+                if time.time() - self.last_time_tick > float(self.simulation_delay_scale.get())/1000:
+                    self.tick()
+                    self.last_time_tick = time.time();
+            else:
+                #self.root.quit()
+                #break
+                pass
+
+        #self.root.mainloop()
 
     def tick(self):
+
+        start = timer()
+
         self.field.tick()
         self.field.paint(self.canvas)
         self.label.configure(text=self.field.getStatus())
-        if self.isRunning and not self.field.isTimeToFinish():
-            self.root.after(250, self.tick)
+        #if self.isRunning and not self.field.isTimeToFinish():
+         #   if time.time() - last_time_tick > self.simulation_speed_scale:
+
+         #       self.last_time_tick = time.time();    
+            #self.root.after(self.simulation_speed_scale.get(), self.tick)
+            
+        print("app tick took: %f" % (timer() - start))
+
+    def restartSimulation(self):
+        self.canvas.delete('all')
+        self.field = self.readFieldFromFile("life_config.txt")
 
     def changeRunningState(self):
         self.isRunning = not self.isRunning

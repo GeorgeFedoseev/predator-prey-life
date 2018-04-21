@@ -1,11 +1,11 @@
-predatorNumber=5
+predatorNumber=20
 preyNumber=20
 obstacleNumber=10
-cellNumberWidth=10
-cellNumberHeight=10
-cellWidth=20
-cellHeight=20
+cellNumberWidth=20
+cellNumberHeight=20
+cellWidth=10
+cellHeight=10
 predatorOffspringTimeLimit=20
 predatorHungerLimit=15
 preyOffspringTimeLimit=5
-iterations=100
+iterations=10000000000
