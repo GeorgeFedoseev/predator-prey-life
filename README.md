@@ -1,6 +1,6 @@
 predator-prey-life
 ==================
-
+Original project by Iurii Piurbeev (https://github.com/yurap/predator-prey-life)
 <img src="https://github.com/GeorgeFedoseev/predator-prey-life/raw/master/screenshot.jpeg" height=400>
 
 
