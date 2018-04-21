@@ -311,23 +311,34 @@ class App(object):
         self.frame = tk.Frame(self.root)
         self.label = tk.Label(self.frame, width=20, text="")
         self.canvas = tk.Canvas(self.frame, height=fieldSize[0], width=fieldSize[1], bg="#008099")
-        self.button = tk.Button(self.frame, text="OK", command=self.restartSimulation)
+        self.restartButton = tk.Button(self.frame, text="Restart", command=self.restartSimulation)
+        self.plotButton = tk.Button(self.frame, text="Plot", command=self.plot)
         self.frame.pack()
         self.label.pack(side=tk.RIGHT)
         self.canvas.pack()
-        self.button.pack()
+        self.restartButton.pack()
+        self.plotButton.pack()
+
+
 
         self.simulation_delay_scale = tk.Scale(self.frame, from_=0, to=1000, orient=tk.HORIZONTAL, label="delay")
-        self.simulation_delay_scale.set(5)
+        self.simulation_delay_scale.set(0)
         self.simulation_delay_scale.pack(side=tk.RIGHT)
 
 
         # plot
+        self.fig = None
+
+        self.plot_x = []
+        self.plot_y_predators = []
+        self.plot_y_prey = []
 
         #plt.axis([0, 10, 0, 1])
 
-        self.last_time_tick = 0
+        self.last_time_tick = 0        
         self.tick()
+
+        
 
         while True:
             try:
@@ -342,13 +353,18 @@ class App(object):
                 if self.isRunning and not self.field.isTimeToFinish():
                     #print("time: %f" % (time.time() - self.last_time_tick))
 
-                    y = np.random.random()
-                    plt.scatter(self.field.step, y)
-                    plt.pause(0.00001)
+                   # y = np.random.random()
+                    # draw prey number
+
 
                     if time.time() - self.last_time_tick > float(self.simulation_delay_scale.get())/1000:
                         self.tick()
                         self.last_time_tick = time.time();
+
+                        self.plot_x.append(self.field.step)
+                        self.plot_y_prey.append(self.field.preyNumber)
+                        self.plot_y_predators.append(self.field.predatorNumber)    
+                        
                 else:                    
                     pass
             except Exception as e:
@@ -375,6 +391,23 @@ class App(object):
     def restartSimulation(self):
         self.canvas.delete('all')
         self.field = self.readFieldFromFile("life_config.txt")
+        self.plot_x = []
+        self.plot_y_predators = []
+        self.plot_y_prey = []
+        self.fig.clf()
+
+    def plot(self):
+        if not self.fig:
+            self.fig = plt.gcf()
+            self.fig.show()
+            self.fig.canvas.draw()
+
+        self.fig.clf()
+        plt.plot(self.plot_x, self.plot_y_prey, c="g")
+        plt.plot(self.plot_x, self.plot_y_predators, c="r")
+        self.fig.canvas.draw()
+
+        
 
     def changeRunningState(self):
         self.isRunning = not self.isRunning
