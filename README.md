@@ -1,6 +1,9 @@
 predator-prey-life
 ==================
 
+<img src="https://github.com/GeorgeFedoseev/predator-prey-life/raw/master/screenshot.jpeg" height=400>
+
+
 Simple python script modelling predator-prey ocean system. Ocean is represented with 2d cell system.
 Each cell can contain either one of predator, prey, obstacle or be empty.
 
