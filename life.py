@@ -313,15 +313,16 @@ class App(object):
         self.frame = tk.Frame(self.root)
         self.label = tk.Label(self.frame, width=20, text="")
         self.canvas = tk.Canvas(self.frame, height=fieldSize[0], width=fieldSize[1], bg="#008099")
-        self.restartButton = tk.Button(self.frame, text="Restart", command=self.restartSimulation)
-        self.plot1Button = tk.Button(self.frame, text="Plot N(t)", command=self.plot_N_t)
-        self.plot2Button = tk.Button(self.frame, text="Plot PreyN(PredatorN)", command=self.plot_PreyN_PredatorN)
+
+        self.restartButton = tk.Button(self.frame, text="Restart", command=self.restartSimulation)        
+        self.plotAllButton = tk.Button(self.frame, text="Plot", command=self.plot_all)
+
         self.frame.pack()
         self.label.pack(side=tk.RIGHT)
         self.canvas.pack()
         self.restartButton.pack()
-        self.plot1Button.pack()
-        self.plot2Button.pack()
+        
+        self.plotAllButton.pack()
 
 
 
@@ -337,6 +338,25 @@ class App(object):
         self.plot_x = []
         self.plot_y_predators = []
         self.plot_y_prey = []
+
+        plt.figure(1)        
+        self.fig_PreyN_PredatorN = plt.gcf()
+        self.fig_PreyN_PredatorN.canvas.set_window_title('Фазовый портрет')
+        self.fig_PreyN_PredatorN.show()
+        plt.hold(True)
+
+        #self.fig_PreyN_PredatorN.show()
+        #self.fig_PreyN_PredatorN.canvas.draw()
+
+        plt.figure(2)
+        plt.title("N(t)")
+        self.fig_N_t = plt.gcf()
+        self.fig_N_t.canvas.set_window_title('N(t)')
+        plt.hold(True)
+        #self.fig_N_t.show()
+        #self.fig_N_t.canvas.draw()
+        self.fig_N_t.show()
+        self.fig_N_t.show()
 
         #plt.axis([0, 10, 0, 1])
 
@@ -384,31 +404,27 @@ class App(object):
         self.plot_y_predators = []
         self.plot_y_prey = []
     
+    def plot_all(self):
+        self.plot_N_t()
+        self.plot_PreyN_PredatorN()
 
-    def plot_PreyN_PredatorN(self):
-        if not self.fig_PreyN_PredatorN:
-            self.fig_PreyN_PredatorN = plt.gcf()
-            self.fig_PreyN_PredatorN.show()
-            self.fig_PreyN_PredatorN.canvas.draw()
+    def plot_PreyN_PredatorN(self):   
 
         # switch to fig      
         plt.figure(self.fig_PreyN_PredatorN.number)
 
-        self.fig_PreyN_PredatorN.clf()
+        self.fig_PreyN_PredatorN.clf()        
+
         plt.plot(self.plot_y_prey, self.plot_y_predators, c="b")        
         self.fig_PreyN_PredatorN.canvas.draw()
         plt.hold(True)
 
     def plot_N_t(self):
-        if not self.fig_N_t:                  
-            self.fig_N_t = plt.gcf()
-            self.fig_N_t.show()
-            self.fig_N_t.canvas.draw()
-
         # switch to fig      
         plt.figure(self.fig_N_t.number)
 
-        self.fig_N_t.clf()
+        self.fig_N_t.clf()       
+
         plt.plot(self.plot_x, self.plot_y_prey, c="g")
         plt.plot(self.plot_x, self.plot_y_predators, c="r")
         self.fig_N_t.canvas.draw()
