@@ -321,8 +321,12 @@ class App(object):
         self.simulation_delay_scale.set(5)
         self.simulation_delay_scale.pack(side=tk.RIGHT)
 
-        self.last_time_tick = 0
 
+        # plot
+
+        #plt.axis([0, 10, 0, 1])
+
+        self.last_time_tick = 0
         self.tick()
 
         while True:
@@ -336,7 +340,11 @@ class App(object):
            
             
                 if self.isRunning and not self.field.isTimeToFinish():
-                    print("time: %f" % (time.time() - self.last_time_tick))
+                    #print("time: %f" % (time.time() - self.last_time_tick))
+
+                    y = np.random.random()
+                    plt.scatter(self.field.step, y)
+                    plt.pause(0.00001)
 
                     if time.time() - self.last_time_tick > float(self.simulation_delay_scale.get())/1000:
                         self.tick()
