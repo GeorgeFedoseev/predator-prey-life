@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def calc_Lotka_Volterra(preyN, predatorN, timeSteps, timeScale=0.001, preyBirthRate=50, preyEatenRate=0.1,
+def calc_Lotka_Volterra(preyN, predatorN, timeSteps, timeScale=0.0012, preyBirthRate=50, preyEatenRate=0.1,
                              predatorDeathRate=20, predatorEatImprovRate=0.05, alpha=0.01):    
     
     preyValues = []
