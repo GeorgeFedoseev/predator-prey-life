@@ -4,6 +4,22 @@
 		"selected_items":
 		[
 			[
+				"B",
+				"BOTH\tstatement"
+			],
+			[
+				"Label",
+				"Label"
+			],
+			[
+				"la",
+				"Label"
+			],
+			[
+				"prev",
+				"prevPreyN\tstatement"
+			],
+			[
 				"fig",
 				"fig_LV_phase"
 			],
@@ -37,10 +53,6 @@
 			],
 			[
 				"prevpre",
-				"prevPredatorN\tstatement"
-			],
-			[
-				"prev",
 				"prevPredatorN\tstatement"
 			],
 			[
@@ -447,17 +459,8 @@
 			"file": "life.py",
 			"settings":
 			{
-				"buffer_size": 15577,
+				"buffer_size": 15663,
 				"encoding": "UTF-8 with BOM",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "lotka_volterra.py",
-			"settings":
-			{
-				"buffer_size": 1227,
-				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
@@ -466,6 +469,24 @@
 			"settings":
 			{
 				"buffer_size": 216,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "lotka_volterra.py",
+			"settings":
+			{
+				"buffer_size": 1726,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "predator-prey-life.sublime-project",
+			"settings":
+			{
+				"buffer_size": 351,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -555,6 +576,7 @@
 	],
 	"file_history":
 	[
+		"/Users/gosha/Projects/predator-prey-life/life.py",
 		"/Users/gosha/Projects/DeepSpeech/DeepSpeech.py",
 		"/Users/gosha/Projects/DeepSpeech/util/telegram_logger.py",
 		"/Users/gosha/Projects/DeepSpeech/bin/import_voxforge_ru.py",
@@ -655,6 +677,9 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"getDecision",
+			"makeOffspring",
+			"offspri",
 			"predatorN",
 			"offspringTimeLimit",
 			"predatorOffspringTimeLimit",
@@ -688,15 +713,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 15577,
+						"buffer_size": 15663,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								11581,
-								11581
+								13465,
+								13465
 							]
 						],
 						"settings":
@@ -718,10 +743,6 @@
 								{
 									"characters": ".",
 									"selector": "source.python - string - constant.numeric"
-								},
-								{
-									"characters": ".",
-									"selector": "source.python - string - constant.numeric"
 								}
 							],
 							"syntax": "Packages/Python/Python.sublime-syntax",
@@ -729,7 +750,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 5027.0,
+						"translation.y": 6348.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -737,54 +758,6 @@
 				},
 				{
 					"buffer": 1,
-					"file": "lotka_volterra.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1227,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								943,
-								943
-							]
-						],
-						"settings":
-						{
-							"WordCount":
-							{
-								"changes": 0,
-								"count": 0,
-								"modified": true,
-								"selection": true,
-								"status": -1,
-								"syntax": "python"
-							},
-							"auto_complete_triggers":
-							[
-								{
-									"characters": ".",
-									"selector": "source.python - string - comment - constant.numeric"
-								},
-								{
-									"characters": ".",
-									"selector": "source.python - string - constant.numeric"
-								}
-							],
-							"syntax": "Packages/Python/Python.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 157.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
 					"file": "life_config.txt",
 					"semi_transient": false,
 					"settings":
@@ -821,7 +794,94 @@
 					"type": "text"
 				},
 				{
+					"buffer": 2,
+					"file": "lotka_volterra.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1726,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								121,
+								121
+							]
+						],
+						"settings":
+						{
+							"WordCount":
+							{
+								"changes": 0,
+								"count": 0,
+								"modified": true,
+								"selection": true,
+								"status": -1,
+								"syntax": "python"
+							},
+							"auto_complete_triggers":
+							[
+								{
+									"characters": ".",
+									"selector": "source.python - string - comment - constant.numeric"
+								},
+								{
+									"characters": ".",
+									"selector": "source.python - string - constant.numeric"
+								}
+							],
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
 					"buffer": 3,
+					"file": "predator-prey-life.sublime-project",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 351,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								351,
+								351
+							]
+						],
+						"settings":
+						{
+							"WordCount":
+							{
+								"changes": -1,
+								"modified": true,
+								"selection": true,
+								"status": -1,
+								"syntax": "json"
+							},
+							"syntax": "Packages/JavaScript/JSON.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
 					"file": ".gitignore",
 					"semi_transient": false,
 					"settings":
@@ -845,11 +905,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
-					"buffer": 4,
+					"buffer": 5,
 					"semi_transient": false,
 					"settings":
 					{
@@ -872,7 +932,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 5,
 					"type": "text"
 				}
 			]
@@ -917,7 +977,7 @@
 	{
 		"height": 0.0
 	},
-	"pinned_build_system": "Packages/Python/Python.sublime-build",
+	"pinned_build_system": "Anaconda Python Builder",
 	"project": "predator-prey-life.sublime-project",
 	"replace":
 	{

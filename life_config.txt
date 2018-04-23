@@ -1,4 +1,4 @@
-predatorNumber=100
+predatorNumber=500
 preyNumber=200
 obstacleNumber=10
 cellNumberWidth=50

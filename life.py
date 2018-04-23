@@ -447,7 +447,7 @@ class App(object):
 
         self.fig_LV_t.clf()       
 
-        res = calc_Lotka_Volterra(200, 100, 1000)
+        res = calc_Lotka_Volterra(self.initial_preyNumber, self.initial_predatorNumber, self.field.step)
         plt.plot(res[0], res[1], c="g")
         plt.plot(res[0], res[2], c="r")
 
@@ -459,9 +459,11 @@ class App(object):
         # switch to fig      
         plt.figure(self.fig_LV_phase.number)
 
+        self.fig_LV_phase.clf()   
+
         #self.fig_LV_phase.clf()       
 
-        res = calc_Lotka_Volterra(200, 100, 1000)
+        res = calc_Lotka_Volterra(self.initial_preyNumber, self.initial_predatorNumber, self.field.step)
         plt.plot(res[1], res[2], c="b", alpha=1)
         
 
@@ -482,6 +484,9 @@ class App(object):
         for line in lines:
             equation = line.rstrip('\n').split('=')
             config[equation[0]] = int(equation[1])
+
+        self.initial_predatorNumber = config['predatorNumber']
+        self.initial_preyNumber = config['preyNumber']
 
         objectNumbers = (config['predatorNumber'], config['preyNumber'], config['obstacleNumber'])
         cellNumbers = (config['cellNumberWidth'], config['cellNumberHeight'])
